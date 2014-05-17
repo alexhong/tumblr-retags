@@ -2,7 +2,7 @@
 // @name        Tumblr Retags
 // @namespace   http://alexhong.net/
 // @description Shows tags added to reblogs, and wraps all tag lists for easy readability.
-// @version     0.1
+// @version     0.1.1
 // @include     *://www.tumblr.com/*
 // ==/UserScript==
 
