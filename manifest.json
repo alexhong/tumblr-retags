@@ -4,8 +4,6 @@
    "version": "0.1",
    "manifest_version": 2,
    "content_scripts": [ {
-      "exclude_globs": [  ],
-      "exclude_matches": [  ],
       "include_globs": [ "*://www.tumblr.com/*" ],
       "js": [ "tumblr-retags.user.js" ],
       "matches": [ "http://*/*", "https://*/*" ],
