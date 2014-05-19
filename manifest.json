@@ -1,7 +1,7 @@
 {
    "name": "Tumblr Retags",
-   "description": "Shows tags added to reblogs, and wraps all tag lists for easy readability.",
-   "version": "0.1.1",
+   "description": "Adds tags to reblog notes, and wraps all tag lists for easy readability.",
+   "version": "0.2",
    "manifest_version": 2,
    "content_scripts": [ {
       "include_globs": [ "*://www.tumblr.com/*" ],
