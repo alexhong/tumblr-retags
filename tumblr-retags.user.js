@@ -82,4 +82,5 @@ $('head').append('<style>\
 .post_full .post_tags .post_tag.featured { margin-right: 11px; padding-top: 2px; padding-bottom: 2px; }\
 .post_full .post_tags .post_tag:after, .retags a:after { content: "\\00a0\\00a0  "; }\
 .post_full .post_tags .post_tag.featured:after { display: none; }\
+.post_notes .notes_outer_container.popover .note.with_commentary span.action { min-height: 0; }\
 </style>');
