@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name        Tumblr Retags
 // @namespace   http://alexhong.net/
-// @description Adds tags to reblog notes, and wraps all tag lists for readability.
-// @version     0.3
+// @description Adds tags to reblog notes, and wraps all tags for readability.
+// @version     0.3.1
 // @include     *://www.tumblr.com/*
 // ==/UserScript==
 
@@ -59,7 +59,7 @@ var retags = {
 						}
 					},
 					onerror: function(){
-						$retags.addClass('error').append("Can't access post.");
+						$retags.addClass('error').append('Could not access post.');
 						$container.addClass(container_class).append($retags);
 					}
 				});
@@ -67,7 +67,7 @@ var retags = {
 		});
 	},
 	css: '<style id="retags-css">\
-			.retags { margin-top: 10px; white-space: normal; }\
+			.retags { white-space: normal; margin-top: 10px; }\
 			.retags.error { color: #c00000; }\
 			.retags a { color: #a7a7a7 !important; position: relative; margin-right: 11px; text-decoration: none; }\
 			.retags a:hover { color: #969696 !important; }\
@@ -80,15 +80,17 @@ var retags = {
 			.ui_note .part_response + .retags { margin-top: -7px; padding-top: 0; }\
 			.post_full .post_tags { white-space: normal; padding: 1px 0; line-height: 18px; }\
 			.post_full .post_tags:after { display: none; }\
-			.post_full .post_tags .post_tag { display: inline; }\
-			.post_full .post_tags .post_tag:after, .retags a:after { content: "\\00a0  "; font-size: 0; line-height: 0; }\
+			.post_full .post_tags .post_tag,\
+			.post_full .post_tags .post_tag.featured { display: inline; padding-top: 2px; padding-bottom: 2px; }\
+			.post_full .post_tags .post_tag:after,\
+			.retags a:after { content: "\\00a0  "; font-size: 0; line-height: 0; }\
 		</style>'
 };
 
 if (typeof XKit !== 'undefined') {
 	//* TITLE Retags **//
-	//* VERSION 0.3 **//
-	//* DESCRIPTION Adds tags to reblog notes, and wraps all tag lists for readability. **//
+	//* VERSION 0.3.1 **//
+	//* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
 	//* DEVELOPER alexhong **//
 	//* FRAME false **//
 	//* BETA false **//
