@@ -1,6 +1,6 @@
 {
    "name": "Tumblr Retags",
-   "version": "0.4.1",
+   "version": "0.5",
    "description": "Adds tags to reblog notes, and wraps all tags for readability.",
    "manifest_version": 2,
    "content_scripts": [ {

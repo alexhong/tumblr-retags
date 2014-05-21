@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Tumblr Retags
 // @namespace   http://alexhong.net/
-// @version     0.4.1
+// @version     0.5
 // @description Adds tags to reblog notes, and wraps all tags for readability.
 // @include     *://www.tumblr.com/*
 // @downloadURL https://github.com/alexhong/tumblr-retags/raw/master/tumblr-retags.user.js
@@ -9,7 +9,6 @@
 
 var retags = {
 	api_key: 'T1UAblXBunwjrKuX8ZgtC0ukM70zrej2SPLMEAbM56wYWxdWDs',
-	api_url: 'http://api.tumblr.com/v2/blog/$1/posts/info?id=$2&api_key=',
 	selectors: '.reblog,.is_reblog,.notification_reblog',
 	observer: new MutationObserver(function(ms){
 		ms.forEach(function(m){
@@ -49,19 +48,29 @@ var retags = {
 				var url = $container.find('.notification_target').attr('href');
 			}
 			if (url) {
-				retags.request($container,url.replace(/^http:\/\/(.+)\/post\/(\d+).*/g,retags.api_url+retags.api_key));
+				url = url.split('/');
+				var host = url[2];
+				var id = url[4];
+				var cached = localStorage.getItem('retags_'+id);
+				if (cached === null) {
+					retags.request($container,id,'http://api.tumblr.com/v2/blog/'+host+'/posts/info?id='+id+'&api_key='+retags.api_key);
+				} else {
+					retags.append($container,JSON.parse(cached));
+				}
 			}
 		});
 	},
 	request: 
 		(typeof GM_xmlhttpRequest !== 'undefined')
 		// if userscript or XKit
-		? function($container,url) {
+		? function($container,id,url) {
 			GM_xmlhttpRequest({
 				method: 'GET',
 				url: url,
 				onload: function(data){
-					retags.append($container,JSON.parse(data.responseText).response.posts[0].tags);
+					var tags = JSON.parse(data.responseText).response.posts[0].tags;
+					localStorage.setItem('retags_'+id,JSON.stringify(tags));
+					retags.append($container,tags);
 				},
 				onerror: function(){
 					retags.append($container,'error');
@@ -69,9 +78,11 @@ var retags = {
 			});
 		}
 		// if Chrome extension
-		: function($container,url) {
+		: function($container,id,url) {
 			$.getJSON(url,function(data){
-				retags.append($container,data.response.posts[0].tags);
+				var tags = data.response.posts[0].tags;
+				localStorage.setItem('retags_'+id,JSON.stringify(tags));
+				retags.append($container,tags);
 			}).fail(function(){
 				retags.append($container,'error');
 			});
