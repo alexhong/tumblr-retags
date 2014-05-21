@@ -55,7 +55,7 @@ var retags = {
 	},
 	request: 
 		(typeof GM_xmlhttpRequest !== 'undefined')
-		// if userscript or XKit extension
+		// if userscript or XKit
 		? function($container,url) {
 			GM_xmlhttpRequest({
 				method: 'GET',
