@@ -7,6 +7,15 @@
 // @downloadURL https://github.com/alexhong/tumblr-retags/raw/master/tumblr-retags.user.js
 // ==/UserScript==
 
+//* TITLE Retags **//
+//* DEVELOPER alexhong **//
+//* VERSION 0.4.1 REV A **//
+//* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
+//* DETAILS Retags displays the tags users added when reblogging a post, in notes popovers and on your dashboard and Activity pages. **//
+//* FRAME false **//
+//* SLOW false **//
+//* BETA false **//
+
 var retags = {
 	api_key: 'T1UAblXBunwjrKuX8ZgtC0ukM70zrej2SPLMEAbM56wYWxdWDs',
 	api_url: 'http://api.tumblr.com/v2/blog/$1/posts/info?id=$2&api_key=',
@@ -92,9 +101,9 @@ var retags = {
 	},
 	css: 
 	'<style class="retags-css">\
-		.retags.error { color: #c00000; }\
 		.retags { white-space: normal; margin-top: 10px; }\
-		.retags + .retags:before { content: "Warning: You are running multiple copies of Retags."; color: #c00000; }\
+		.retags.error { color: #c00000; }\
+		.retags + .retags:before { color: #c00000; content: "Warning: You are running multiple copies of Retags."; }\
 		.retags + .retags a { display: none; }\
 		.retags a { color: #a7a7a7 !important; position: relative; margin-right: 11px; text-decoration: none; }\
 		.retags a:hover { color: #969696 !important; }\
@@ -116,14 +125,6 @@ var retags = {
 };
 
 if (typeof XKit !== 'undefined') {
-	//* TITLE Retags **//
-	//* DEVELOPER alexhong **//
-	//* VERSION 0.4.1 **//
-	//* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
-	//* DETAILS Retags displays the tags users added when reblogging a post, in notes popovers and on your dashboard and Activity pages. **//
-	//* FRAME false **//
-	//* SLOW false **//
-	//* BETA false **//
 	XKit.extensions.retags = {
 	 	running: false,
 		run: function(){
