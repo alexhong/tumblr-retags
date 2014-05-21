@@ -1,1 +1,1 @@
-[http://lx.tumblr.com/retags]
+http://lx.tumblr.com/retags
