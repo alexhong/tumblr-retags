@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name        Tumblr Retags
 // @namespace   http://alexhong.net/
+// @version     0.4.1
 // @description Adds tags to reblog notes, and wraps all tags for readability.
-// @version     0.4
 // @include     *://www.tumblr.com/*
 // @downloadURL https://github.com/alexhong/tumblr-retags/raw/master/tumblr-retags.user.js
 // ==/UserScript==
@@ -31,8 +31,9 @@ var retags = {
 	},
 	tag: function($el){
 		$el.each(function(){
-			if ($(this).find('.retags').length)
+			if ($(this).find('.retags').length) {
 				return;
+			}
 			var url = '';
 			// popover
 			if ($(this).hasClass('note')) {
@@ -47,8 +48,9 @@ var retags = {
 				var $container = $(this).find('.notification_sentence');
 				var url = $container.find('.notification_target').attr('href');
 			}
-			if (url)
+			if (url) {
 				retags.request($container,url.replace(/^http:\/\/(.+)\/post\/(\d+).*/g,retags.api_url+retags.api_key));
+			}
 		});
 	},
 	request: 
@@ -68,7 +70,6 @@ var retags = {
 		}
 		// if Chrome extension
 		: function($container,url) {
-			var tags;
 			$.getJSON(url,function(data){
 				retags.append($container,data.response.posts[0].tags);
 			}).fail(function(){
@@ -80,7 +81,7 @@ var retags = {
 		var $retags = $('<div class="retags">');
 		var container_class = $container.hasClass('note') ? 'with_commentary' : '';
 		if (tags === 'error') {
-			$retags.addClass('error').append('Could not access post.');
+			$retags.addClass('error').append('Error: Could not access post.');
 			$container.addClass(container_class).append($retags);					
 		} else if (tags.length) {
 			tags.forEach(function(tag){
@@ -91,8 +92,10 @@ var retags = {
 	},
 	css: 
 	'<style class="retags-css">\
-		.retags { white-space: normal; margin-top: 10px; }\
 		.retags.error { color: #c00000; }\
+		.retags { white-space: normal; margin-top: 10px; }\
+		.retags + .retags:before { content: "Warning: You are running multiple copies of Retags."; color: #c00000; }\
+		.retags + .retags a { display: none; }\
 		.retags a { color: #a7a7a7 !important; position: relative; margin-right: 11px; text-decoration: none; }\
 		.retags a:hover { color: #969696 !important; }\
 		.note .retags { font-size: 12px; line-height: 1.3; }\
@@ -101,6 +104,7 @@ var retags = {
 		.notification .retags a { color: rgba(255,255,255,0.3) !important; }\
 		.notification .retags a:hover { color: rgba(255,255,255,0.4) !important; }\
 		.ui_note .retags { margin-top: 0; padding: 40px 50px 13px; }\
+		.ui_note .retags + .retags { margin-top: -5px; padding-top: 0; }\
 		.ui_note .part_response + .retags { margin-top: -7px; padding-top: 0; }\
 		.post_full .post_tags { white-space: normal; padding: 1px 0; line-height: 18px; }\
 		.post_full .post_tags:after { display: none; }\
@@ -113,10 +117,12 @@ var retags = {
 
 if (typeof XKit !== 'undefined') {
 	//* TITLE Retags **//
-	//* VERSION 0.4 **//
-	//* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
 	//* DEVELOPER alexhong **//
+	//* VERSION 0.4.1 **//
+	//* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
+	//* DETAILS Retags displays the tags users added when reblogging a post, in notes popovers and on your dashboard and Activity pages. **//
 	//* FRAME false **//
+	//* SLOW false **//
 	//* BETA false **//
 	XKit.extensions.retags = {
 	 	running: false,
