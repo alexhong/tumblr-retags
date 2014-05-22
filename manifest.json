@@ -9,7 +9,7 @@
       "128": "icons/icon128.png" 
    },
    "content_scripts": [ {
-      "matches": [ "*://www.tumblr.com/*", "*://api.tumblr.com/*" ],
+      "matches": [ "*://*.tumblr.com/*" ],
       "js": [ "tumblr-retags.user.js" ]
    } ]
 }

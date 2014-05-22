@@ -4,8 +4,8 @@
 // @version     0.5.2
 // @description Adds tags to reblog notes, and wraps all tags for readability.
 // @icon        https://raw.githubusercontent.com/alexhong/tumblr-retags/master/icons/icon48.png
-// @match       *://www.tumblr.com/*
-// @match       *://api.tumblr.com/*
+// @match       *://*.tumblr.com/*
+// @include     *://www.tumblr.com/*
 // @downloadURL https://github.com/alexhong/tumblr-retags/raw/master/tumblr-retags.user.js
 // ==/UserScript==
 
