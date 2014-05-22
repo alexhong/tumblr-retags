@@ -52,10 +52,10 @@ var retags = {
 				var host = url[2];
 				var id = url[4];
 				var cached = localStorage.getItem('retags_'+id);
-				if (cached === null) {
-					retags.request($container,id,'http://api.tumblr.com/v2/blog/'+host+'/posts/info?id='+id+'&api_key='+retags.api_key);
-				} else {
+				if (cached !== null) {
 					retags.append($container,JSON.parse(cached));
+				} else {
+					retags.request($container,id,'http://api.tumblr.com/v2/blog/'+host+'/posts/info?id='+id+'&api_key='+retags.api_key);
 				}
 			}
 		});
