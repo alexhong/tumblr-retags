@@ -3,6 +3,7 @@
 // @namespace   http://alexhong.net/
 // @version     0.5
 // @description Adds tags to reblog notes, and wraps all tags for readability.
+// @icon        https://raw.githubusercontent.com/alexhong/tumblr-retags/master/icons/icon48.png
 // @include     *://www.tumblr.com/*
 // @downloadURL https://github.com/alexhong/tumblr-retags/raw/master/tumblr-retags.user.js
 // ==/UserScript==
