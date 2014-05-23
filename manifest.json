@@ -1,7 +1,7 @@
 {
    "manifest_version": 2,
    "name": "Tumblr Retags",
-   "version": "0.5.2",
+   "version": "0.5.3",
    "description": "Adds tags to reblog notes, and wraps all tags for readability.",
    "icons": { 
       "16": "icons/icon16.png",
@@ -11,6 +11,6 @@
    "content_scripts": [ {
       "matches": [ "*://*.tumblr.com/*" ],
       "include_globs": [ "*://www.tumblr.com/*" ],
-      "js": [ "tumblr-retags.user.js" ]
+      "js": [ "jquery-2.0.3.min.js", "tumblr-retags.user.js" ]
    } ]
 }
