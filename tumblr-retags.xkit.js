@@ -1,6 +1,6 @@
 //* TITLE Retags **//
 //* DEVELOPER alexhong **//
-//* VERSION 0.5 REV A **//
+//* VERSION 0.5.3 REV A **//
 //* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
 //* DETAILS Retags displays the tags users added when reblogging a post, in notes popovers and on your dashboard and Activity pages. **//
 //* FRAME false **//
@@ -8,7 +8,7 @@
 //* BETA false **//
 
 var retags = {
-	api_key: 'T1UAblXBunwjrKuX8ZgtC0ukM70zrej2SPLMEAbM56wYWxdWDs',
+	api_key: '3DFxEZm0tGISOmdvWe9Fl1QsQMo1LFqEatnc8GQ68wgF1YTZ4w',
 	selectors: '.reblog,.is_reblog,.notification_reblog',
 	observer: new MutationObserver(function(ms){
 		ms.forEach(function(m){

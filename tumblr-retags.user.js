@@ -1,25 +1,25 @@
 // ==UserScript==
 // @name        Tumblr Retags
 // @namespace   http://alexhong.net/
-// @version     0.5
+// @version     0.5.3
 // @description Adds tags to reblog notes, and wraps all tags for readability.
-// @icon        https://raw.githubusercontent.com/alexhong/tumblr-retags/master/icons/icon64.png
 // @match       *://*.tumblr.com/*
 // @include     *://www.tumblr.com/*
 // @require     https://code.jquery.com/jquery-2.0.3.min.js
 // @downloadURL https://github.com/alexhong/tumblr-retags/raw/master/tumblr-retags.user.js
+// @icon        https://raw.githubusercontent.com/alexhong/tumblr-retags/master/icons/icon64.png
 // ==/UserScript==
 
 //* TITLE       Retags **//
 //* DEVELOPER   alexhong **//
-//* VERSION     0.5 **//
+//* VERSION     0.5.3 **//
 //* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
 //* FRAME       false **//
 //* SLOW        false **//
 //* BETA        false **//
 
 var retags = {
-	api_key: 'T1UAblXBunwjrKuX8ZgtC0ukM70zrej2SPLMEAbM56wYWxdWDs',
+	api_key: '3DFxEZm0tGISOmdvWe9Fl1QsQMo1LFqEatnc8GQ68wgF1YTZ4w',
 	selectors: '.reblog,.is_reblog,.notification_reblog',
 	observer: new MutationObserver(function(ms){
 		ms.forEach(function(m){
@@ -137,18 +137,16 @@ var retags = {
 	</style>'
 };
 
-if (typeof XKit !== 'undefined') {
-	XKit.extensions.Lx_retags = {
-	 	running: false,
-		run: function(){
-			this.running = true;
-			retags.run();
-		},
-		destroy: function(){
-			this.running = false;
-			retags.destroy();
-		}
-	};
-} else {
-	retags.run();
-}
+(typeof XKit === 'undefined') 
+? retags.run()
+: XKit.extensions.Lx_retags = {
+ 	running: false,
+	run: function(){
+		this.running = true;
+		retags.run();
+	},
+	destroy: function(){
+		this.running = false;
+		retags.destroy();
+	}
+};
