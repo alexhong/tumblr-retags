@@ -1,11 +1,10 @@
-//* TITLE Retags **//
-//* DEVELOPER alexhong **//
-//* VERSION 0.5.3 REV A **//
+//* TITLE       Retags **//
+//* DEVELOPER   alexhong **//
+//* VERSION     0.6 **//
 //* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
-//* DETAILS Retags displays the tags users added when reblogging a post, in notes popovers and on your dashboard and Activity pages. **//
-//* FRAME false **//
-//* SLOW false **//
-//* BETA false **//
+//* FRAME       false **//
+//* SLOW        false **//
+//* BETA        false **//
 
 var retags = {
 	api_key: '3DFxEZm0tGISOmdvWe9Fl1QsQMo1LFqEatnc8GQ68wgF1YTZ4w',
@@ -16,16 +15,23 @@ var retags = {
 		});
 	}),
 	run: function(){
-		retags.observer.observe(document,{childList:true,subtree:true});
+		retags.observer.observe($('body')[0],{childList:true,subtree:true});
 		$('head').append(retags.css);
+		$('.ui_notes_switcher .part-toggle').append(retags.toggle);
+		$('#retags-toggle').change(function(){
+			($(this).prop('checked'))
+				? $('head').append(retags.css_filter)
+				: $('.retags-css.filter').remove()
+			;
+		});
 		retags.tag($(retags.selectors));
-		$(document).on('mouseover','.post_tags_inner',function(){
+		$('body').on('mouseover','.post_tags_inner',function(){
 			$(this).attr('class','DISABLED_post_tags_inner');
 		});
 	},
 	destroy: function(){
 		retags.observer.disconnect();
-		$('.retags-css,.retags').remove();
+		$('.retags,.retags-toggle,.retags-css').remove();
 		$('.DISABLED_post_tags_inner').attr('class','post_tags_inner');
 	},
 	tag: function($el){
@@ -42,6 +48,9 @@ var retags = {
 			} else if ($(this).hasClass('ui_note')) {
 				var $container = $(this).find('.stage');
 				var url = $container.find('.part_glass').attr('href');
+				if ($(this).find('.part_response').length) {
+					$(this).addClass('is_response');
+				}
 			// dashboard
 			} else if ($(this).hasClass('notification')) {
 				var $container = $(this).find('.notification_sentence');
@@ -72,8 +81,8 @@ var retags = {
 					localStorage.setItem('retags_'+id,JSON.stringify(tags));
 					retags.append($container,tags);
 				},
-				onerror: function(){
-					retags.append($container,'error');
+				onerror: function(data){
+					retags.append($container,'ERROR: '+data.status);
 				}
 			});
 		}
@@ -83,26 +92,38 @@ var retags = {
 				var tags = data.response.posts[0].tags;
 				localStorage.setItem('retags_'+id,JSON.stringify(tags));
 				retags.append($container,tags);
-			}).fail(function(){
-				retags.append($container,'error');
+			}).fail(function(jqXHR,status,error){
+				retags.append($container,status.toUpperCase()+': '+(error||jqXHR.status));
 			});
 		}
 	,
 	append: function($container,tags){
 		var $retags = $('<div class="retags">');
 		var container_class = $container.hasClass('note') ? 'with_commentary' : '';
-		if (tags === 'error') {
-			$retags.addClass('error').append('Error: Could not access post.');
-			$container.addClass(container_class).append($retags);					
+		if (typeof tags === 'string') {
+			$retags.addClass('error').append(tags);
+			$container.addClass(container_class).append($retags);
 		} else if (tags.length) {
 			tags.forEach(function(tag){
 				$retags.append('<a href="//tumblr.com/tagged/'+tag.replace(/ /g,'-')+'">#'+tag+'</a>');
 			});
 			$container.addClass(container_class).append($retags);
+			$container.closest(retags.selectors).addClass('is_retags');
 		}
 	},
+	toggle:
+	'<label class="retags-toggle binary_switch">\
+		<input type="checkbox" id="retags-toggle">\
+		<span class="binary_switch_track"></span>\
+		<span class="binary_switch_button"></span>\
+		<span class="binary_switch_label">Show only retags / responses</span>\
+	</label>'
+	,
 	css: 
 	'<style class="retags-css">\
+		.ui_notes .date_header .part_full_date.stuck { width: 165px; margin-left:400px; }\
+		.retags-toggle { top: -1px; margin-left: 15px; }\
+		.retags-toggle .binary_switch_label { position: absolute; top: 0; left: 24px; padding: 0 8px; line-height: 14px; white-space: nowrap; }\
 		.retags { white-space: normal; margin-top: 10px; }\
 		.retags.error { color: #c00000; }\
 		.retags + .retags:before { color: #c00000; content: "Warning: You are running multiple copies of Retags."; }\
@@ -123,6 +144,12 @@ var retags = {
 		.post_full .post_tags .post_tag.featured { display: inline; padding-top: 2px; padding-bottom: 2px; }\
 		.post_full .post_tags .post_tag:after,\
 		.retags a:after { content: "\\00a0  "; font-size: 0; line-height: 0; }\
+	</style>'
+	,
+	css_filter: 
+	'<style class="retags-css filter">\
+		.ui_note { display: none; }\
+		.ui_note.is_retags, .ui_note.is_response { display: block; }\
 	</style>'
 };
 
