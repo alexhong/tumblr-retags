@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Tumblr Retags
 // @namespace   http://alexhong.net/
-// @version     0.6
+// @version     0.6.1
 // @description Adds tags to reblog notes, and wraps all tags for readability.
 // @include     *://www.tumblr.com/*
 // @require     https://code.jquery.com/jquery-2.0.3.min.js
@@ -11,7 +11,7 @@
 
 //* TITLE       Retags **//
 //* DEVELOPER   alexhong **//
-//* VERSION     0.6 **//
+//* VERSION     0.6.1 **//
 //* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -20,22 +20,17 @@
 var retags = {
 	api_key: '3DFxEZm0tGISOmdvWe9Fl1QsQMo1LFqEatnc8GQ68wgF1YTZ4w',
 	selectors: '.reblog,.is_reblog,.notification_reblog',
+	blog_name: $('body').data('new-root').split('/').pop(),
 	observer: new MutationObserver(function(ms){
 		ms.forEach(function(m){
 			retags.tag($(m.addedNodes).filter(retags.selectors));
 		});
 	}),
 	run: function(){
-		retags.observer.observe($('body')[0],{childList:true,subtree:true});
 		$('head').append(retags.css);
-		$('.ui_notes_switcher .part-toggle').append(retags.toggle);
-		$('#retags-toggle').change(function(){
-			($(this).prop('checked'))
-				? $('head').append(retags.css_filter)
-				: $('.retags-css.filter').remove()
-			;
-		});
+		retags.toggle();
 		retags.tag($(retags.selectors));
+		retags.observer.observe($('body')[0],{childList:true,subtree:true});
 		$('body').on('mouseover','.post_tags_inner',function(){
 			$(this).attr('class','DISABLED_post_tags_inner');
 		});
@@ -44,6 +39,22 @@ var retags = {
 		retags.observer.disconnect();
 		$('.retags,.retags-toggle,.retags-css').remove();
 		$('.DISABLED_post_tags_inner').attr('class','post_tags_inner');
+	},
+	toggle: function(){
+		var toggle = 'retags_toggle_'+retags.blog_name;
+		$('.ui_notes_switcher .part-toggle').append(retags.html_toggle);
+		$('#retags-toggle').change(function(){
+			if ($(this).prop('checked')) {
+				localStorage.setItem(toggle,'true');
+				$('head').append(retags.css_filter);
+			} else {
+				localStorage.setItem(toggle,'false');
+				$('.retags-css.filter').remove();
+			}
+		});
+		if (localStorage.getItem(toggle) === 'true') {
+			$('#retags-toggle').click();
+		}
 	},
 	tag: function($el){
 		$el.each(function(){
@@ -122,7 +133,7 @@ var retags = {
 			$container.closest(retags.selectors).addClass('is_retags');
 		}
 	},
-	toggle:
+	html_toggle:
 	'<label class="retags-toggle binary_switch">\
 		<input type="checkbox" id="retags-toggle">\
 		<span class="binary_switch_track"></span>\
