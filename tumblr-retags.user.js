@@ -27,7 +27,7 @@ var retags = {
 		});
 	}),
 	run: function(){
-		$('head').append(retags.css);
+		retags.css.appendTo('head');
 		retags.add_toggle();
 		retags.observer.observe($('body')[0],{childList:true,subtree:true});
 		retags.tag(retags.selectors);
@@ -46,11 +46,11 @@ var retags = {
 	},
 	add_toggle: function(){
 		var toggle = 'retags_toggle_'+retags.blog_name;
-		$('.ui_notes_switcher .part-toggle').append(retags.html_toggle);
+		retags.html_toggle.appendTo('.ui_notes_switcher .part-toggle');
 		$('#retags-toggle').change(function(){
 			if ($(this).prop('checked')) {
 				localStorage.setItem(toggle,'true');
-				$('head').append(retags.css_toggle);
+				retags.css_toggle.appendTo('head');
 			} else {
 				localStorage.setItem(toggle,'false');
 				retags.css_toggle.detach();
