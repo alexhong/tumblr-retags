@@ -136,7 +136,6 @@ var retags = {
 		div.retags + div.retags:before { color: #c00000; content: "Warning: You are running multiple copies of Retags."; }\
 		div.retags + div.retags a { display: none; }\
 		div.retags a { color: #a7a7a7 !important; position: relative; margin-right: 11px; text-decoration: none; }\
-		div.retags a:after { content: "\\00a0  "; font-size: 0; line-height: 0; }\
 		div.retags a:hover { color: #969696 !important; }\
 		.note div.retags { font-size: 12px; line-height: 1.3; }\
 		.note div.retags a { margin-right: 9px; }\
@@ -151,6 +150,7 @@ var retags = {
 		.post_full .post_tags .post_tag,\
 		.post_full .post_tags .post_tag.featured { display: inline; padding-top: 2px; padding-bottom: 2px; }\
 		.post_full .post_tags .post_tag:after,\
+		div.retags a:after { content: "\\00a0  "; font-size: 0; line-height: 0; }\
 	</style>')
 	,
 	css_toggle: 
