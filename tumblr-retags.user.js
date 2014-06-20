@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Tumblr Retags
 // @namespace   http://alexhong.net/
-// @version     0.6.4
+// @version     0.6.5
 // @description Adds tags to reblog notes, and wraps all tags for readability.
 // @include     *://www.tumblr.com/*
 // @require     https://code.jquery.com/jquery-2.0.3.min.js
@@ -11,7 +11,7 @@
 
 //* TITLE       Retags **//
 //* DEVELOPER   alexhong **//
-//* VERSION     0.6.4 **//
+//* VERSION     0.6.5 **//
 //* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -164,7 +164,7 @@ var retags = {
 	css_toggle: 
 	$('<style class="retags">\
 		.ui_note { display: none; }\
-		.ui_note.is_retags, .ui_note.is_response { display: block; }\
+		.ui_note.is_retags, .ui_note.is_response, .ui_note.is_reply, .ui_note.is_photo_reply, .ui_note.is_answer { display: block; }\
 	</style>')
 	,
 	html_toggle:
