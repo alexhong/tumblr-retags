@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Tumblr Retags
 // @namespace   http://alexhong.net/
-// @version     0.6.5
+// @version     0.6.6
 // @description Adds tags to reblog notes, and wraps all tags for readability.
 // @include     *://www.tumblr.com/*
 // @require     https://code.jquery.com/jquery-2.0.3.min.js
@@ -11,7 +11,7 @@
 
 //* TITLE       Retags **//
 //* DEVELOPER   alexhong **//
-//* VERSION     0.6.5 **//
+//* VERSION     0.6.6 **//
 //* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -30,7 +30,7 @@ var retags = {
 		retags.add_toggle(window.location.pathname.split('/')[2]);
 		retags.observer.observe($('body')[0],{childList:true,subtree:true});
 		retags.tag(retags.selectors);
-		$('body').on('mouseover.retags','.post_tags_inner',function(){
+		$('body').on('mouseover.retags','.post_full .post_tags_inner',function(){
 			$(this).attr('class','DISABLED_post_tags_inner');
 		});
 	},
