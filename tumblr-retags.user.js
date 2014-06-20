@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Tumblr Retags
 // @namespace   http://alexhong.net/
-// @version     0.6.2
+// @version     0.6.4
 // @description Adds tags to reblog notes, and wraps all tags for readability.
 // @include     *://www.tumblr.com/*
 // @require     https://code.jquery.com/jquery-2.0.3.min.js
@@ -11,7 +11,7 @@
 
 //* TITLE       Retags **//
 //* DEVELOPER   alexhong **//
-//* VERSION     0.6.2 **//
+//* VERSION     0.6.4 **//
 //* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -20,7 +20,6 @@
 var retags = {
 	api_key: '3DFxEZm0tGISOmdvWe9Fl1QsQMo1LFqEatnc8GQ68wgF1YTZ4w',
 	selectors: '.reblog,.is_reblog,.notification_reblog',
-	blog_name: $('body').data('new-root').split('/').pop(),
 	observer: new MutationObserver(function(ms){
 		ms.forEach(function(m){
 			retags.tag($(m.addedNodes).filter(retags.selectors));
@@ -28,7 +27,7 @@ var retags = {
 	}),
 	run: function(){
 		retags.css.appendTo('head');
-		retags.add_toggle();
+		retags.add_toggle(window.location.pathname.split('/')[2]);
 		retags.observer.observe($('body')[0],{childList:true,subtree:true});
 		retags.tag(retags.selectors);
 		$('body').on('mouseover.retags','.post_tags_inner',function(){
@@ -44,8 +43,8 @@ var retags = {
 		$('body').off('.retags');
 		$('.DISABLED_post_tags_inner').attr('class','post_tags_inner');
 	},
-	add_toggle: function(){
-		var toggle = 'retags_toggle_'+retags.blog_name;
+	add_toggle: function(id){
+		var toggle = 'retags_toggle_'+id;
 		retags.html_toggle.appendTo('.ui_notes_switcher .part-toggle');
 		$('#retags-toggle').change(function(){
 			if ($(this).prop('checked')) {
@@ -158,10 +157,8 @@ var retags = {
 		.ui_note .part_response + div.retags { margin-top: -7px; padding-top: 0; }\
 		.post_full .post_tags { white-space: normal; padding: 1px 0; line-height: 18px; }\
 		.post_full .post_tags:after { display: none; }\
-		.post_full .post_tags .post_tag,\
-		.post_full .post_tags .post_tag.featured { display: inline; padding-top: 2px; padding-bottom: 2px; }\
-		.post_full .post_tags .post_tag:after,\
-		div.retags a:after { content: "\\00a0  "; font-size: 0; line-height: 0; }\
+		.post_full .post_tags .post_tag, .post_full .post_tags .post_tag.featured { display: inline; padding-top: 2px; padding-bottom: 2px; }\
+		.post_full .post_tags .post_tag:after, div.retags a:after { content: "\\00a0  "; font-size: 0; line-height: 0; }\
 	</style>')
 	,
 	css_toggle: 
