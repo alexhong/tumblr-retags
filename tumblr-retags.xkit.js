@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   alexhong **//
-//* VERSION     0.6.6 **//
+//* VERSION     0.6.7 **//
 //* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -16,7 +16,7 @@ var retags = {
 	}),
 	run: function(){
 		retags.css.appendTo('head');
-		retags.add_toggle(window.location.pathname.split('/')[2]);
+		retags.add_toggle();
 		retags.observer.observe($('body')[0],{childList:true,subtree:true});
 		retags.tag(retags.selectors);
 		$('body').on('mouseover.retags','.post_full .post_tags_inner',function(){
@@ -33,18 +33,17 @@ var retags = {
 		$('.DISABLED_post_tags_inner').attr('class','post_tags_inner');
 	},
 	add_toggle: function(id){
-		var toggle = 'retags_toggle_'+id;
 		retags.html_toggle.appendTo('.ui_notes_switcher .part-toggle');
 		$('#retags-toggle').change(function(){
 			if ($(this).prop('checked')) {
-				localStorage.setItem(toggle,'true');
 				retags.css_toggle.appendTo('head');
+				cookie.set('retags_toggle','true',30);
 			} else {
-				localStorage.setItem(toggle,'false');
 				retags.css_toggle.detach();
+				cookie.set('retags_toggle','false',30);
 			}
 		});
-		if (localStorage.getItem(toggle) === 'true') {
+		if (cookie.get('retags_toggle') === 'true') {
 			$('#retags-toggle').click();
 		}
 	},
@@ -74,11 +73,11 @@ var retags = {
 			}
 			if (url) {
 				url = url.split('/');
-				var host = url[2], id = url[4], cache = 'retags_'+id;
-				if (localStorage.getItem(cache) !== null) {
-					retags.append($t,cls,$c,JSON.parse(localStorage.getItem(cache)));
+				var host = url[2], id = url[4], key = 'retags_'+id;
+				if (localStorage && localStorage.getItem(key) !== null) {
+					retags.append($t,cls,$c,JSON.parse(localStorage.getItem(key)));
 				} else {
-					retags.request($t,cls,$c,cache,'http://api.tumblr.com/v2/blog/'+host+'/posts/info?id='+id+'&api_key='+retags.api_key);
+					retags.request($t,cls,$c,key,'http://api.tumblr.com/v2/blog/'+host+'/posts/info?id='+id+'&api_key='+retags.api_key);
 				}
 			}
 		});
@@ -86,14 +85,14 @@ var retags = {
 	request: 
 		(typeof GM_xmlhttpRequest !== 'undefined')
 		// if userscript or XKit
-		? function($t,cls,$c,cache,url) {
+		? function($t,cls,$c,key,url) {
 			GM_xmlhttpRequest({
 				method: 'GET',
 				url: url,
 				onload: function(data){
 					var tags = JSON.parse(data.responseText).response.posts[0].tags;
-					localStorage.setItem(cache,JSON.stringify(tags));
 					retags.append($t,cls,$c,tags);
+					retags.store(key,JSON.stringify(tags));
 				},
 				onerror: function(data){
 					retags.append($t,cls,$c,'ERROR: '+data.status);
@@ -101,16 +100,25 @@ var retags = {
 			});
 		}
 		// if Chrome extension
-		: function($t,cls,$c,cache,url) {
+		: function($t,cls,$c,key,url) {
 			$.getJSON(url,function(data){
 				var tags = data.response.posts[0].tags;
-				localStorage.setItem(cache,JSON.stringify(tags));
 				retags.append($t,cls,$c,tags);
+				retags.store(key,JSON.stringify(tags));
 			}).fail(function(jqXHR,status,error){
 				retags.append($t,cls,$c,status.toUpperCase()+': '+(error||jqXHR.status));
 			});
 		}
 	,
+	store: function(key,value) {
+		if (localStorage) {
+			try {
+				localStorage.setItem(key,value);
+			} catch(e) {
+				localStorage.clear();
+			}
+		}
+	},
 	append: function($t,cls,$c,tags){
 		if (tags.length) {
 			var $retags = $('<div class="retags">');
@@ -163,6 +171,35 @@ var retags = {
 		<span class="binary_switch_button"></span>\
 		<span class="binary_switch_label">Show only retags / responses</span>\
 	</label>')
+};
+
+var cookie = {
+	set: function(name,value,days) {
+		var expires = '';
+		if (days) {
+			var date = new Date();
+			date.setTime(date.getTime()+(days*24*60*60*1000));
+			expires = '; expires='+date.toGMTString();
+		}
+		document.cookie = name+'='+value+expires;
+	},
+	get: function(name) {
+		var nameEQ = name+'=';
+		var ca = document.cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) == ' ') {
+				c = c.substring(1,c.length);
+			}
+			if (c.indexOf(nameEQ) == 0) {
+				return c.substring(nameEQ.length,c.length);
+			}
+		}
+		return null;
+	},
+	remove: function(name) {
+		cookie.set(name,'',-1);
+	}
 };
 
 XKit.extensions.retags = {
