@@ -73,11 +73,11 @@ var retags = {
 			}
 			if (url) {
 				url = url.split('/');
-				var host = url[2], id = url[4], key = 'retags_'+id;
-				if (localStorage && localStorage.getItem(key) !== null) {
-					retags.append($t,cls,$c,JSON.parse(localStorage.getItem(key)));
+				var host = url[2], id = url[4], name = 'retags_'+id;
+				if (localStorage && localStorage.getItem(name) !== null) {
+					retags.append($t,cls,$c,JSON.parse(localStorage.getItem(name)));
 				} else {
-					retags.request($t,cls,$c,key,'http://api.tumblr.com/v2/blog/'+host+'/posts/info?id='+id+'&api_key='+retags.api_key);
+					retags.request($t,cls,$c,name,'http://api.tumblr.com/v2/blog/'+host+'/posts/info?id='+id+'&api_key='+retags.api_key);
 				}
 			}
 		});
@@ -85,14 +85,14 @@ var retags = {
 	request: 
 		(typeof GM_xmlhttpRequest !== 'undefined')
 		// if userscript or XKit
-		? function($t,cls,$c,key,url) {
+		? function($t,cls,$c,name,url) {
 			GM_xmlhttpRequest({
 				method: 'GET',
 				url: url,
 				onload: function(data){
 					var tags = JSON.parse(data.responseText).response.posts[0].tags;
 					retags.append($t,cls,$c,tags);
-					retags.store(key,JSON.stringify(tags));
+					retags.store(name,JSON.stringify(tags));
 				},
 				onerror: function(data){
 					retags.append($t,cls,$c,'ERROR: '+data.status);
@@ -100,25 +100,16 @@ var retags = {
 			});
 		}
 		// if Chrome extension
-		: function($t,cls,$c,key,url) {
+		: function($t,cls,$c,name,url) {
 			$.getJSON(url,function(data){
 				var tags = data.response.posts[0].tags;
 				retags.append($t,cls,$c,tags);
-				retags.store(key,JSON.stringify(tags));
+				retags.store(name,JSON.stringify(tags));
 			}).fail(function(jqXHR,status,error){
 				retags.append($t,cls,$c,status.toUpperCase()+': '+(error||jqXHR.status));
 			});
 		}
 	,
-	store: function(key,value) {
-		if (localStorage) {
-			try {
-				localStorage.setItem(key,value);
-			} catch(e) {
-				localStorage.clear();
-			}
-		}
-	},
 	append: function($t,cls,$c,tags){
 		if (tags.length) {
 			var $retags = $('<div class="retags">');
@@ -131,6 +122,15 @@ var retags = {
 			}
 			$t.addClass(cls);
 			$c.append($retags);			
+		}
+	},
+	store: function(name,value) {
+		if (localStorage) {
+			try {
+				localStorage.setItem(name,value);
+			} catch(e) {
+				localStorage.clear();
+			}
 		}
 	},
 	css: 
