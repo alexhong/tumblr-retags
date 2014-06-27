@@ -27,7 +27,6 @@ var retags = {
 	}),
 	run: function() {
 		retags.css.appendTo('head');
-		retags.add_ignore();
 		retags.add_toggle();
 		retags.observer.observe($('body')[0],{childList:true,subtree:true});
 		retags.tag(retags.selectors);
