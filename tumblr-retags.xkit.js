@@ -14,7 +14,7 @@ var retags = {
 			retags.tag($(m.addedNodes).filter(retags.selectors));
 		});
 	}),
-	run: function(){
+	run: function() {
 		retags.css.appendTo('head');
 		retags.add_toggle();
 		retags.observer.observe($('body')[0],{childList:true,subtree:true});
@@ -23,7 +23,7 @@ var retags = {
 			$(this).attr('class','DISABLED_post_tags_inner');
 		});
 	},
-	destroy: function(){
+	destroy: function() {
 		retags.css.detach();
 		retags.css_toggle.detach();
 		retags.html_toggle.detach();
@@ -32,22 +32,22 @@ var retags = {
 		$('body').off('.retags');
 		$('.DISABLED_post_tags_inner').attr('class','post_tags_inner');
 	},
-	add_toggle: function(id){
+	add_toggle: function() {
 		retags.html_toggle.appendTo('.ui_notes_switcher .part-toggle');
 		$('#retags-toggle').change(function(){
 			if ($(this).prop('checked')) {
 				retags.css_toggle.appendTo('head');
-				cookie.set('retags_toggle','true',30);
+				cookie.set('retags_toggle',1,30);
 			} else {
 				retags.css_toggle.detach();
-				cookie.set('retags_toggle','false',30);
+				cookie.remove('retags_toggle');
 			}
 		});
-		if (cookie.get('retags_toggle') === 'true') {
+		if (cookie.get('retags_toggle')) {
 			$('#retags-toggle').click();
 		}
 	},
-	tag: function(el){
+	tag: function(el) {
 		$(el).each(function(){
 			var $t = $(this), cls, $c, url;
 			if ($t.find('div.retags').length) {
@@ -89,12 +89,12 @@ var retags = {
 			GM_xmlhttpRequest({
 				method: 'GET',
 				url: url,
-				onload: function(data){
+				onload: function(data) {
 					var tags = JSON.parse(data.responseText).response.posts[0].tags;
 					retags.append($t,cls,$c,tags);
 					retags.store(name,JSON.stringify(tags));
 				},
-				onerror: function(data){
+				onerror: function(data) {
 					retags.append($t,cls,$c,'ERROR: '+data.status);
 				}
 			});
@@ -110,7 +110,7 @@ var retags = {
 			});
 		}
 	,
-	append: function($t,cls,$c,tags){
+	append: function($t,cls,$c,tags) {
 		if (tags.length) {
 			var $retags = $('<div class="retags">');
 			if (typeof tags === 'string') {
@@ -135,7 +135,7 @@ var retags = {
 	},
 	css: 
 	$('<style class="retags">\
-		.ui_notes .date_header .part_full_date.stuck { width: 165px; margin-left:400px; }\
+		.ui_notes .date_header .part_full_date.stuck { width: 165px; margin-left: 400px; }\
 		label.retags { top: -1px; margin-left: 15px; }\
 		label.retags .binary_switch_label { position: absolute; top: 0; left: 24px; padding: 0 8px; line-height: 14px; white-space: nowrap; }\
 		div.retags { white-space: normal; margin-top: 10px; }\
@@ -204,11 +204,11 @@ var cookie = {
 
 XKit.extensions.retags = {
  	running: false,
-	run: function(){
+	run: function() {
 		this.running = true;
 		retags.run();
 	},
-	destroy: function(){
+	destroy: function() {
 		this.running = false;
 		retags.destroy();
 	}
