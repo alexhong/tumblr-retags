@@ -1,8 +1,9 @@
 // ==UserScript==
 // @name        Tumblr Retags
 // @namespace   http://alexhong.net/
-// @version     0.6.7
+// @version     0.6.7.1
 // @description Adds tags to reblog notes, and wraps all tags for readability.
+// @grant       GM_xmlhttpRequest
 // @include     *://www.tumblr.com/*
 // @require     https://code.jquery.com/jquery-2.0.3.min.js
 // @downloadURL https://github.com/alexhong/tumblr-retags/raw/master/tumblr-retags.user.js
