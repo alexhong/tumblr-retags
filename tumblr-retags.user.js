@@ -1,21 +1,26 @@
 // ==UserScript==
 // @name        Tumblr Retags
 // @namespace   http://alexhong.net/
-// @version     0.6.7
+<<<<<<< HEAD
+// @version     0.6.8
+=======
+// @version     0.6.7.1
+>>>>>>> FETCH_HEAD
 // @description Adds tags to reblog notes, and wraps all tags for readability.
+// @grant       GM_xmlhttpRequest
 // @include     *://www.tumblr.com/*
 // @require     https://code.jquery.com/jquery-2.0.3.min.js
 // @downloadURL https://github.com/alexhong/tumblr-retags/raw/master/tumblr-retags.user.js
 // @icon        https://raw.githubusercontent.com/alexhong/tumblr-retags/master/icons/icon64.png
 // ==/UserScript==
 
-//* TITLE       Retags **//
-//* DEVELOPER   alexhong **//
-//* VERSION     0.6.7 **//
+//* TITLE Retags **//
+//* DEVELOPER alexhong **//
+//* VERSION 0.6.8 **//
 //* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
-//* FRAME       false **//
-//* SLOW        false **//
-//* BETA        false **//
+//* FRAME false **//
+//* SLOW false **//
+//* BETA false **//
 
 var retags = {
 	api_key: '3DFxEZm0tGISOmdvWe9Fl1QsQMo1LFqEatnc8GQ68wgF1YTZ4w',
@@ -30,9 +35,6 @@ var retags = {
 		retags.add_toggle();
 		retags.observer.observe($('body')[0],{childList:true,subtree:true});
 		retags.tag(retags.selectors);
-		$('body').on('mouseover.retags','.post_full .post_tags_inner',function(){
-			$(this).attr('class','DISABLED_post_tags_inner');
-		});
 	},
 	destroy: function() {
 		retags.css.detach();
@@ -40,8 +42,6 @@ var retags = {
 		retags.html_toggle.detach();
 		retags.observer.disconnect();
 		$('.retags').remove();
-		$('body').off('.retags');
-		$('.DISABLED_post_tags_inner').attr('class','post_tags_inner');
 	},
 	add_toggle: function() {
 		retags.html_toggle.appendTo('.ui_notes_switcher .part-toggle');
@@ -163,7 +163,7 @@ var retags = {
 		.ui_note div.retags { margin-top: 0; padding: 40px 50px 13px; }\
 		.ui_note div.retags + div.retags { margin-top: -5px; padding-top: 0; }\
 		.ui_note .part_response + div.retags { margin-top: -7px; padding-top: 0; }\
-		.post_full .post_tags { white-space: normal; padding: 1px 0; line-height: 18px; }\
+		.post_full .post_tags { white-space: normal; padding-top: 1px; padding-bottom: 1px; line-height: 18px; }\
 		.post_full .post_tags:after { display: none; }\
 		.post_full .post_tags .post_tag, .post_full .post_tags .post_tag.featured { display: inline; padding-top: 2px; padding-bottom: 2px; }\
 		.post_full .post_tags .post_tag:after, div.retags a:after { content: "\\00a0  "; font-size: 0; line-height: 0; }\
