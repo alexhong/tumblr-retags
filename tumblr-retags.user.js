@@ -1,11 +1,7 @@
 // ==UserScript==
 // @name        Tumblr Retags
 // @namespace   http://alexhong.net/
-<<<<<<< HEAD
 // @version     0.6.8
-=======
-// @version     0.6.7.1
->>>>>>> FETCH_HEAD
 // @description Adds tags to reblog notes, and wraps all tags for readability.
 // @grant       GM_xmlhttpRequest
 // @include     *://www.tumblr.com/*
