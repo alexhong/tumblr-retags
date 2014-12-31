@@ -2,7 +2,7 @@
 // @name        Retags for Tumblr
 // @namespace   http://alexhong.net/
 // @version     1.0
-// @description Adds tags to reblog notes, and wraps all tags for readability.
+// @description Retags is a Tumblr extension that makes tag reading easy.
 // @grant       GM_xmlhttpRequest
 // @include     *://www.tumblr.com/*
 // @require     https://code.jquery.com/jquery-2.0.3.min.js
@@ -13,7 +13,7 @@
 //* TITLE Retags **//
 //* DEVELOPER alexhong **//
 //* VERSION 1.0 **//
-//* DESCRIPTION Adds tags to reblog notes, and wraps all tags for readability. **//
+//* DESCRIPTION Retags is a Tumblr extension that makes tag reading easy. **//
 //* FRAME false **//
 //* SLOW false **//
 //* BETA false **//
