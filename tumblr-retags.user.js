@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Retags for Tumblr
 // @namespace   http://alexhong.net/
-// @version     1.0.1
+// @version     1.0
 // @description Retags is a Tumblr extension that makes tag reading easy.
 // @grant       GM_xmlhttpRequest
 // @include     *://www.tumblr.com/*
@@ -12,20 +12,14 @@
 
 //* TITLE Retags **//
 //* DEVELOPER alexhong **//
-//* VERSION 1.0.1 **//
+//* VERSION 1.0 **//
 //* DESCRIPTION Retags is a Tumblr extension that makes tag reading easy. **//
 //* FRAME false **//
 //* SLOW false **//
 //* BETA false **//
 
-try {
-	var storageEnabled = localStorage;
-} catch(e) {
-	var storageEnabled = false;
-}
-
 var retags = {
-	version: '1.0.1',g
+	version: '1.0',
 	api_key: '3DFxEZm0tGISOmdvWe9Fl1QsQMo1LFqEatnc8GQ68wgF1YTZ4w',
 	selectors: '.reblog,.is_reblog,.notification_reblog',
 	observer: new MutationObserver(function(ms){
@@ -85,7 +79,7 @@ var retags = {
 			if (url) {
 				url = url.split('/');
 				var host = url[2], id = url[4], name = 'rt_'+id;
-				if (storageEnabled && localStorage.getItem(name) !== null) {
+				if (localStorage && localStorage.getItem(name) !== null) {
 					retags.append($t,cls,$c,JSON.parse(localStorage.getItem(name)));
 				} else {
 					retags.request($t,cls,$c,name,'https://api.tumblr.com/v2/blog/'+host+'/posts/info?id='+id+'&api_key='+retags.api_key);
@@ -140,7 +134,7 @@ var retags = {
 		}
 	},
 	store: function(name,value) {
-		if (storageEnabled) {
+		if (localStorage) {
 			try {
 				localStorage.setItem(name,value);
 			} catch(e) {
